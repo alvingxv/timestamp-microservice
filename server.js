@@ -3,6 +3,13 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/api", (req, res) => {
+    res.json({
+        unix: new Date().getTime(),
+        utc: new Date().toUTCString()
+    })
+});
+
 app.get('/api/:date', (req, res) => {
     let datestr = req.params.date;
 
@@ -12,14 +19,20 @@ app.get('/api/:date', (req, res) => {
 
     if (testRegex1.test(datestr)) {
         let date = new Date(datestr);
-        const unix = Math.floor(date.getTime() / 1000);
-        return res.json({ unix: unix, utc: date.toUTCString() });
+        const unix = Math.floor(date.getTime());
+        res.json({
+            unix: unix,
+            utc: date.toUTCString()
+        });
     } else if (testRegex2.test(datestr)) {
         let unix = parseInt(datestr);
         let date = new Date(unix);
-        return res.json({ unix: unix, utc: date.toUTCString() });
+        res.json({
+            unix: (unix),
+            utc: date.toUTCString()
+        });
     } else {
-        return res.json({ error: 'Invalid Date' });
+        res.json({ error: 'Invalid Date' });
     }
 
 
